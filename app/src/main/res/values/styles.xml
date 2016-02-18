@@ -5,4 +5,8 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
+    <style name="MyButton" parent="Theme.AppCompat">
+        <item name="colorControlHighlight">@color/primary_light</item>
+        <item name="colorButtonNormal">@color/primary_dark</item>
+    </style>
 </resources>
