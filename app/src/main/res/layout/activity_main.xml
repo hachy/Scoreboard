@@ -1,0 +1,133 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".MainActivity">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView">
+
+        <TextView
+            android:id="@+id/scoreLeft"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_score"
+            android:textStyle="bold"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/percent_margin_default"
+            app:layout_marginTopPercent="@fraction/percent_margin_default"
+            app:layout_widthPercent="@fraction/score_width" />
+
+        <TextView
+            android:id="@+id/gameLeft"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_game"
+            android:textStyle="bold"
+            app:layout_heightPercent="@fraction/game_height"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/percent_margin_left_1"
+            app:layout_marginTopPercent="@fraction/percent_margin_default"
+            app:layout_widthPercent="@fraction/game_width" />
+
+        <TextView
+            android:id="@+id/gameRight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_game"
+            android:textStyle="bold"
+            app:layout_heightPercent="@fraction/game_height"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/percent_margin_left_2"
+            app:layout_marginTopPercent="@fraction/percent_margin_default"
+            app:layout_widthPercent="@fraction/game_width" />
+
+        <Button
+            android:id="@+id/changeEndsButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_dark"
+            android:gravity="center"
+            android:onClick="changeEnds"
+            android:text="@string/change_ends"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_button"
+            android:textStyle="bold"
+            app:layout_heightPercent="@fraction/button_height"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/button_margin"
+            app:layout_marginTopPercent="@fraction/button_margin_top_1"
+            app:layout_widthPercent="@fraction/button_width" />
+
+        <Button
+            android:id="@+id/resetScoreButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_dark"
+            android:gravity="center"
+            android:onClick="resetScore"
+            android:text="@string/reset_scores"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_button"
+            android:textStyle="bold"
+            app:layout_heightPercent="@fraction/button_height"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/button_margin"
+            app:layout_marginTopPercent="@fraction/button_margin_top_2"
+            app:layout_widthPercent="@fraction/button_width" />
+
+        <Button
+            android:id="@+id/resetAllButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_dark"
+            android:gravity="center"
+            android:onClick="resetAll"
+            android:text="@string/reset_all"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_button"
+            android:textStyle="bold"
+            app:layout_heightPercent="@fraction/button_height"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/button_margin"
+            app:layout_marginTopPercent="@fraction/button_margin_top_3"
+            app:layout_widthPercent="@fraction/button_width" />
+
+        <TextView
+            android:id="@+id/scoreRight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_score"
+            android:textStyle="bold"
+            app:layout_marginBottomPercent="@fraction/percent_margin_default"
+            app:layout_marginLeftPercent="@fraction/percent_margin_left_3"
+            app:layout_marginTopPercent="@fraction/percent_margin_default"
+            app:layout_widthPercent="@fraction/score_width" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_test" />
+</RelativeLayout>
