@@ -43,35 +43,14 @@ public class MainActivity extends AppCompatActivity {
         rightScore = (TextView) findViewById(R.id.scoreRight);
         leftGame = (TextView) findViewById(R.id.gameLeft);
         rightGame = (TextView) findViewById(R.id.gameRight);
+
         showScore();
         showGame();
 
-        leftScore.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorLScore.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        rightScore.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorRScore.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        leftGame.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorLGame.onTouchEvent(event);
-                return true;
-            }
-        });
-        rightGame.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorRGame.onTouchEvent(event);
-                return true;
-            }
-        });
+        leftScore.setOnTouchListener(leftScoreListener);
+        rightScore.setOnTouchListener(rightScoreListener);
+        leftGame.setOnTouchListener(leftGameListener);
+        rightGame.setOnTouchListener(rightGameListener);
 
         AdView mAdView = (AdView) this.findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build(); // release用
@@ -81,6 +60,38 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mAdView.loadAd(adRequest);
     }
+
+    View.OnTouchListener leftScoreListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorLScore.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener rightScoreListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorRScore.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener leftGameListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorLGame.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener rightGameListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorRGame.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
 
     public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         private String detector;
