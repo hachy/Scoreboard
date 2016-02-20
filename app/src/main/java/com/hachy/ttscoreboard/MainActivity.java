@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -43,35 +44,22 @@ public class MainActivity extends AppCompatActivity {
         rightScore = (TextView) findViewById(R.id.scoreRight);
         leftGame = (TextView) findViewById(R.id.gameLeft);
         rightGame = (TextView) findViewById(R.id.gameRight);
+
+        Button changeEndsButton = (Button) findViewById(R.id.changeEndsButton);
+        Button resetScoreButton = (Button) findViewById(R.id.resetScoreButton);
+        Button resetAllButton = (Button) findViewById(R.id.resetAllButton);
+
         showScore();
         showGame();
 
-        leftScore.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorLScore.onTouchEvent(event);
-                return true;
-            }
-        });
+        leftScore.setOnTouchListener(leftScoreListener);
+        rightScore.setOnTouchListener(rightScoreListener);
+        leftGame.setOnTouchListener(leftGameListener);
+        rightGame.setOnTouchListener(rightGameListener);
 
-        rightScore.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorRScore.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        leftGame.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorLGame.onTouchEvent(event);
-                return true;
-            }
-        });
-        rightGame.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mDetectorRGame.onTouchEvent(event);
-                return true;
-            }
-        });
+        changeEndsButton.setOnClickListener(changeEndsListener);
+        resetScoreButton.setOnClickListener(resetScoreListener);
+        resetAllButton.setOnClickListener(resetAllListener);
 
         AdView mAdView = (AdView) this.findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build(); // release用
@@ -80,6 +68,85 @@ public class MainActivity extends AppCompatActivity {
                 .addTestDevice(getResources().getString(R.string.test_device_id))  // テスト用携帯電話
                 .build();
         mAdView.loadAd(adRequest);
+    }
+
+    View.OnTouchListener leftScoreListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorLScore.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener rightScoreListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorRScore.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener leftGameListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorLGame.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnTouchListener rightGameListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mDetectorRGame.onTouchEvent(motionEvent);
+            return true;
+        }
+    };
+
+    View.OnClickListener changeEndsListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int ls = lscore;
+            lscore = rscore;
+            rscore = ls;
+            int lg = lgame;
+            lgame = rgame;
+            rgame = lg;
+            showScore();
+            showGame();
+        }
+    };
+
+    View.OnClickListener resetScoreListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            resetScore();
+        }
+    };
+
+    View.OnClickListener resetAllListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            resetScore();
+            lgame = 0;
+            rgame = 0;
+            showGame();
+        }
+    };
+
+    public void resetScore() {
+        lscore = 0;
+        rscore = 0;
+        showScore();
+    }
+
+    protected void showScore() {
+        leftScore.setText(String.valueOf(lscore));
+        rightScore.setText(String.valueOf(rscore));
+    }
+
+    protected void showGame() {
+        leftGame.setText(String.valueOf(lgame));
+        rightGame.setText(String.valueOf(rgame));
     }
 
     public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -158,40 +225,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    public void changeEnds(View view) {
-        int ls = lscore;
-        lscore = rscore;
-        rscore = ls;
-        int lg = lgame;
-        lgame = rgame;
-        rgame = lg;
-        showScore();
-        showGame();
-    }
-
-    public void resetScore(View view) {
-        lscore = 0;
-        rscore = 0;
-        showScore();
-    }
-
-    public void resetAll(View view) {
-        resetScore(view);
-        lgame = 0;
-        rgame = 0;
-        showGame();
-    }
-
-    protected void showScore() {
-        leftScore.setText(String.valueOf(lscore));
-        rightScore.setText(String.valueOf(rscore));
-    }
-
-    protected void showGame() {
-        leftGame.setText(String.valueOf(lgame));
-        rightGame.setText(String.valueOf(rgame));
     }
 
 }
