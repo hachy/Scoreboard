@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ScoreBoard</string>
+    <string name="app_name_staging" translatable="false">TestScoreBoard</string>
     <string name="change_ends" translatable="false">Change Ends</string>
     <string name="reset_scores" translatable="false">Reset Scores</string>
     <string name="reset_all" translatable="false">Reset All</string>
