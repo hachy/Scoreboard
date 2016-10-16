@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private static final String STATE_L_SCORE = "state_left_score";
+    private static final String STATE_R_SCORE = "state_right_score";
+    private static final String STATE_L_GAME = "state_left_game";
+    private static final String STATE_R_GAME = "state_right_game";
     private int lscore = 0;
     private int rscore = 0;
     private int lgame = 0;
@@ -48,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
         Button changeEndsButton = (Button) findViewById(R.id.changeEndsButton);
         Button resetScoreButton = (Button) findViewById(R.id.resetScoreButton);
         Button resetAllButton = (Button) findViewById(R.id.resetAllButton);
+
+        if (savedInstanceState != null) {
+            lscore = savedInstanceState.getInt(STATE_L_SCORE);
+            rscore = savedInstanceState.getInt(STATE_R_SCORE);
+            lgame = savedInstanceState.getInt(STATE_L_GAME);
+            rgame = savedInstanceState.getInt(STATE_R_GAME);
+        }
 
         showScore();
         showGame();
@@ -227,4 +238,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_L_SCORE, lscore);
+        outState.putInt(STATE_R_SCORE, rscore);
+        outState.putInt(STATE_L_GAME, lgame);
+        outState.putInt(STATE_R_GAME, rgame);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lscore = savedInstanceState.getInt(STATE_L_SCORE);
+        rscore = savedInstanceState.getInt(STATE_R_SCORE);
+        lgame = savedInstanceState.getInt(STATE_L_GAME);
+        rgame = savedInstanceState.getInt(STATE_R_GAME);
+    }
 }
