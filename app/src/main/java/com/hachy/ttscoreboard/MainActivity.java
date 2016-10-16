@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     public class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         private String detector;
 
-        public MyGestureListener(String detector) {
+        private MyGestureListener(String detector) {
             this.detector = detector;
         }
 
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
-        protected void onSwipeDown() {
+        private void onSwipeDown() {
             switch (detector) {
                 case "leftScore":
                     if (lscore > 0) {
