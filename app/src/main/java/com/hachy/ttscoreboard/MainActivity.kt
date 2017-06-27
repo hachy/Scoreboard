@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.Button
-import android.widget.TextView
 
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,10 +19,6 @@ class MainActivity : AppCompatActivity() {
     private var rscore = 0
     private var lgame = 0
     private var rgame = 0
-    private var leftScore: TextView? = null
-    private var rightScore: TextView? = null
-    private var leftGame: TextView? = null
-    private var rightGame: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,15 +28,6 @@ class MainActivity : AppCompatActivity() {
         mDetectorRScore = GestureDetectorCompat(this, MyGestureListener("rightScore"))
         mDetectorLGame = GestureDetectorCompat(this, MyGestureListener("leftGame"))
         mDetectorRGame = GestureDetectorCompat(this, MyGestureListener("rightGame"))
-
-        leftScore = findViewById(R.id.scoreLeft) as TextView
-        rightScore = findViewById(R.id.scoreRight) as TextView
-        leftGame = findViewById(R.id.gameLeft) as TextView
-        rightGame = findViewById(R.id.gameRight) as TextView
-
-        val changeEndsButton = findViewById(R.id.changeEndsButton) as Button
-        val resetScoreButton = findViewById(R.id.resetScoreButton) as Button
-        val resetAllButton = findViewById(R.id.resetAllButton) as Button
 
         if (savedInstanceState != null) {
             lscore = savedInstanceState.getInt(STATE_L_SCORE)
@@ -54,21 +39,22 @@ class MainActivity : AppCompatActivity() {
         showScore()
         showGame()
 
-        leftScore!!.setOnTouchListener { _, motionEvent ->
+        scoreLeft.setOnTouchListener { _, motionEvent ->
             mDetectorLScore!!.onTouchEvent(motionEvent)
             true
         }
 
-        rightScore!!.setOnTouchListener { _, motionEvent ->
+        scoreRight.setOnTouchListener { _, motionEvent ->
             mDetectorRScore!!.onTouchEvent(motionEvent)
             true
         }
 
-        leftGame!!.setOnTouchListener { _, motionEvent ->
+        gameLeft.setOnTouchListener { _, motionEvent ->
             mDetectorLGame!!.onTouchEvent(motionEvent)
             true
         }
-        rightGame!!.setOnTouchListener { _, motionEvent ->
+
+        gameRight.setOnTouchListener { _, motionEvent ->
             mDetectorRGame!!.onTouchEvent(motionEvent)
             true
         }
@@ -95,13 +81,12 @@ class MainActivity : AppCompatActivity() {
             showGame()
         }
 
-        val mAdView = this.findViewById(R.id.adView) as AdView
         //        AdRequest adRequest = new AdRequest.Builder().build(); // release用
         val adRequest = AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // すべてのエミュレータ
                 .addTestDevice(resources.getString(R.string.test_device_id))  // テスト用携帯電話
                 .build()
-        mAdView.loadAd(adRequest)
+        adView.loadAd(adRequest)
     }
 
     fun resetScore() {
@@ -111,13 +96,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     protected fun showScore() {
-        leftScore!!.text = lscore.toString()
-        rightScore!!.text = rscore.toString()
+        scoreLeft.text = lscore.toString()
+        scoreRight.text = rscore.toString()
     }
 
     protected fun showGame() {
-        leftGame!!.text = lgame.toString()
-        rightGame!!.text = rgame.toString()
+        gameLeft.text = lgame.toString()
+        gameRight.text = rgame.toString()
     }
 
     inner class MyGestureListener(private val detector: String) : GestureDetector.SimpleOnGestureListener() {
@@ -143,19 +128,19 @@ class MainActivity : AppCompatActivity() {
             when (detector) {
                 "leftScore" -> {
                     lscore++
-                    leftScore!!.text = lscore.toString()
+                    scoreLeft.text = lscore.toString()
                 }
                 "rightScore" -> {
                     rscore++
-                    rightScore!!.text = rscore.toString()
+                    scoreRight.text = rscore.toString()
                 }
                 "leftGame" -> {
                     lgame++
-                    leftGame!!.text = lgame.toString()
+                    gameLeft.text = lgame.toString()
                 }
                 "rightGame" -> {
                     rgame++
-                    rightGame!!.text = rgame.toString()
+                    gameRight.text = rgame.toString()
                 }
             }
             return false
@@ -165,19 +150,19 @@ class MainActivity : AppCompatActivity() {
             when (detector) {
                 "leftScore" -> if (lscore > 0) {
                     lscore--
-                    leftScore!!.text = lscore.toString()
+                    scoreLeft.text = lscore.toString()
                 }
                 "rightScore" -> if (rscore > 0) {
                     rscore--
-                    rightScore!!.text = rscore.toString()
+                    scoreRight.text = rscore.toString()
                 }
                 "leftGame" -> if (lgame > 0) {
                     lgame--
-                    leftGame!!.text = lgame.toString()
+                    gameLeft.text = lgame.toString()
                 }
                 "rightGame" -> if (rgame > 0) {
                     rgame--
-                    rightGame!!.text = rgame.toString()
+                    gameRight.text = rgame.toString()
                 }
             }
         }
