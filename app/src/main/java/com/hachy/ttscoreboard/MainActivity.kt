@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 
@@ -55,17 +54,46 @@ class MainActivity : AppCompatActivity() {
         showScore()
         showGame()
 
-        leftScore!!.setOnTouchListener { view, motionEvent ->
+        leftScore!!.setOnTouchListener { _, motionEvent ->
             mDetectorLScore!!.onTouchEvent(motionEvent)
             true
         }
-        rightScore!!.setOnTouchListener(rightScoreListener)
-        leftGame!!.setOnTouchListener(leftGameListener)
-        rightGame!!.setOnTouchListener(rightGameListener)
 
-        changeEndsButton.setOnClickListener(changeEndsListener)
-        resetScoreButton.setOnClickListener(resetScoreListener)
-        resetAllButton.setOnClickListener(resetAllListener)
+        rightScore!!.setOnTouchListener { _, motionEvent ->
+            mDetectorRScore!!.onTouchEvent(motionEvent)
+            true
+        }
+
+        leftGame!!.setOnTouchListener { _, motionEvent ->
+            mDetectorLGame!!.onTouchEvent(motionEvent)
+            true
+        }
+        rightGame!!.setOnTouchListener { _, motionEvent ->
+            mDetectorRGame!!.onTouchEvent(motionEvent)
+            true
+        }
+
+        changeEndsButton.setOnClickListener {
+            val ls = lscore
+            lscore = rscore
+            rscore = ls
+            val lg = lgame
+            lgame = rgame
+            rgame = lg
+            showScore()
+            showGame()
+        }
+
+        resetScoreButton.setOnClickListener {
+            resetScore()
+        }
+
+        resetAllButton.setOnClickListener {
+            resetScore()
+            lgame = 0
+            rgame = 0
+            showGame()
+        }
 
         val mAdView = this.findViewById(R.id.adView) as AdView
         //        AdRequest adRequest = new AdRequest.Builder().build(); // release用
@@ -74,46 +102,6 @@ class MainActivity : AppCompatActivity() {
                 .addTestDevice(resources.getString(R.string.test_device_id))  // テスト用携帯電話
                 .build()
         mAdView.loadAd(adRequest)
-    }
-
-    internal var leftScoreListener: View.OnTouchListener = View.OnTouchListener { view, motionEvent ->
-        mDetectorLScore!!.onTouchEvent(motionEvent)
-        true
-    }
-
-    internal var rightScoreListener: View.OnTouchListener = View.OnTouchListener { view, motionEvent ->
-        mDetectorRScore!!.onTouchEvent(motionEvent)
-        true
-    }
-
-    internal var leftGameListener: View.OnTouchListener = View.OnTouchListener { view, motionEvent ->
-        mDetectorLGame!!.onTouchEvent(motionEvent)
-        true
-    }
-
-    internal var rightGameListener: View.OnTouchListener = View.OnTouchListener { view, motionEvent ->
-        mDetectorRGame!!.onTouchEvent(motionEvent)
-        true
-    }
-
-    internal var changeEndsListener: View.OnClickListener = View.OnClickListener {
-        val ls = lscore
-        lscore = rscore
-        rscore = ls
-        val lg = lgame
-        lgame = rgame
-        rgame = lg
-        showScore()
-        showGame()
-    }
-
-    internal var resetScoreListener: View.OnClickListener = View.OnClickListener { resetScore() }
-
-    internal var resetAllListener: View.OnClickListener = View.OnClickListener {
-        resetScore()
-        lgame = 0
-        rgame = 0
-        showGame()
     }
 
     fun resetScore() {
@@ -132,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         rightGame!!.text = rgame.toString()
     }
 
-    inner class MyGestureListener private constructor(private val detector: String) : GestureDetector.SimpleOnGestureListener() {
+    inner class MyGestureListener(private val detector: String) : GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (Math.abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
