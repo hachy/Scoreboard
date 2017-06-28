@@ -12,6 +12,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    enum class Counter {
+        LSCORE, RSCORE, LGAME, RGAME
+    }
+
     private var lscore = 0
     private var rscore = 0
     private var lgame = 0
@@ -21,10 +25,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val DetectorLScore = GestureDetectorCompat(this, MyGestureListener("leftScore"))
-        val DetectorRScore = GestureDetectorCompat(this, MyGestureListener("rightScore"))
-        val DetectorLGame = GestureDetectorCompat(this, MyGestureListener("leftGame"))
-        val DetectorRGame = GestureDetectorCompat(this, MyGestureListener("rightGame"))
+        val DetectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.LSCORE))
+        val DetectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.RSCORE))
+        val DetectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.LGAME))
+        val DetectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.RGAME))
 
         if (savedInstanceState != null) {
             lscore = savedInstanceState.getInt(STATE_L_SCORE)
@@ -102,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         gameRight.text = rgame.toString()
     }
 
-    inner class MyGestureListener(private val detector: String) : GestureDetector.SimpleOnGestureListener() {
+    inner class MyGestureListener(private val detector: Counter) : GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (Math.abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
@@ -123,19 +127,19 @@ class MainActivity : AppCompatActivity() {
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             when (detector) {
-                "leftScore" -> {
+                Counter.LSCORE -> {
                     lscore++
                     scoreLeft.text = lscore.toString()
                 }
-                "rightScore" -> {
+                Counter.RSCORE -> {
                     rscore++
                     scoreRight.text = rscore.toString()
                 }
-                "leftGame" -> {
+                Counter.LGAME -> {
                     lgame++
                     gameLeft.text = lgame.toString()
                 }
-                "rightGame" -> {
+                Counter.RGAME -> {
                     rgame++
                     gameRight.text = rgame.toString()
                 }
@@ -145,19 +149,19 @@ class MainActivity : AppCompatActivity() {
 
         private fun onSwipeDown() {
             when (detector) {
-                "leftScore" -> if (lscore > 0) {
+                Counter.LSCORE -> if (lscore > 0) {
                     lscore--
                     scoreLeft.text = lscore.toString()
                 }
-                "rightScore" -> if (rscore > 0) {
+                Counter.RSCORE -> if (rscore > 0) {
                     rscore--
                     scoreRight.text = rscore.toString()
                 }
-                "leftGame" -> if (lgame > 0) {
+                Counter.LGAME -> if (lgame > 0) {
                     lgame--
                     gameLeft.text = lgame.toString()
                 }
-                "rightGame" -> if (rgame > 0) {
+                Counter.RGAME -> if (rgame > 0) {
                     rgame--
                     gameRight.text = rgame.toString()
                 }
