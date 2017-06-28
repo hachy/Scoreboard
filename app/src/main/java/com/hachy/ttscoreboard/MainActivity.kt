@@ -96,12 +96,12 @@ class MainActivity : AppCompatActivity() {
         showScore()
     }
 
-    protected fun showScore() {
+    fun showScore() {
         scoreLeft.text = lscore.toString()
         scoreRight.text = rscore.toString()
     }
 
-    protected fun showGame() {
+    fun showGame() {
         gameLeft.text = lgame.toString()
         gameRight.text = rgame.toString()
     }
