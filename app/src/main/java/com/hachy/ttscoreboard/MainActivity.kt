@@ -11,10 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var mDetectorLScore: GestureDetectorCompat? = null
-    private var mDetectorRScore: GestureDetectorCompat? = null
-    private var mDetectorLGame: GestureDetectorCompat? = null
-    private var mDetectorRGame: GestureDetectorCompat? = null
+
     private var lscore = 0
     private var rscore = 0
     private var lgame = 0
@@ -24,10 +21,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mDetectorLScore = GestureDetectorCompat(this, MyGestureListener("leftScore"))
-        mDetectorRScore = GestureDetectorCompat(this, MyGestureListener("rightScore"))
-        mDetectorLGame = GestureDetectorCompat(this, MyGestureListener("leftGame"))
-        mDetectorRGame = GestureDetectorCompat(this, MyGestureListener("rightGame"))
+        val DetectorLScore = GestureDetectorCompat(this, MyGestureListener("leftScore"))
+        val DetectorRScore = GestureDetectorCompat(this, MyGestureListener("rightScore"))
+        val DetectorLGame = GestureDetectorCompat(this, MyGestureListener("leftGame"))
+        val DetectorRGame = GestureDetectorCompat(this, MyGestureListener("rightGame"))
 
         if (savedInstanceState != null) {
             lscore = savedInstanceState.getInt(STATE_L_SCORE)
@@ -40,22 +37,22 @@ class MainActivity : AppCompatActivity() {
         showGame()
 
         scoreLeft.setOnTouchListener { _, motionEvent ->
-            mDetectorLScore!!.onTouchEvent(motionEvent)
+            DetectorLScore.onTouchEvent(motionEvent)
             true
         }
 
         scoreRight.setOnTouchListener { _, motionEvent ->
-            mDetectorRScore!!.onTouchEvent(motionEvent)
+            DetectorRScore.onTouchEvent(motionEvent)
             true
         }
 
         gameLeft.setOnTouchListener { _, motionEvent ->
-            mDetectorLGame!!.onTouchEvent(motionEvent)
+            DetectorLGame.onTouchEvent(motionEvent)
             true
         }
 
         gameRight.setOnTouchListener { _, motionEvent ->
-            mDetectorRGame!!.onTouchEvent(motionEvent)
+            DetectorRGame.onTouchEvent(motionEvent)
             true
         }
 
