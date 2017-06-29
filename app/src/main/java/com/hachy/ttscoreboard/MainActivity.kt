@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             showGame()
         }
 
-        //        AdRequest adRequest = new AdRequest.Builder().build(); // release用
+//          val adRequest = AdRequest.Builder().build() // release用
         val adRequest = AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // すべてのエミュレータ
                 .addTestDevice(resources.getString(R.string.test_device_id))  // テスト用携帯電話
