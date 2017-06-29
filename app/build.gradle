@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -30,4 +32,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:percent:25.3.1'
     compile 'com.google.android.gms:play-services-ads:11.0.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
 }
