@@ -31,12 +31,10 @@ class MainActivity : AppCompatActivity() {
         val DetectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.LGAME))
         val DetectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.RGAME))
 
-        if (savedInstanceState != null) {
-            lscore = savedInstanceState.getInt(STATE_L_SCORE)
-            rscore = savedInstanceState.getInt(STATE_R_SCORE)
-            lgame = savedInstanceState.getInt(STATE_L_GAME)
-            rgame = savedInstanceState.getInt(STATE_R_GAME)
-        }
+        lscore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
+        rscore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
+        lgame = savedInstanceState?.getInt(STATE_L_GAME) ?: 0
+        rgame = savedInstanceState?.getInt(STATE_R_GAME) ?: 0
 
         showScore()
         showGame()
