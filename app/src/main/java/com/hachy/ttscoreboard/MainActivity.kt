@@ -7,6 +7,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() {
             showGame()
         }
 
+        MobileAds.initialize(this, resources.getString(R.string.banner_ad_unit_id_test))
 //          val adRequest = AdRequest.Builder().build() // release用
         val adRequest = AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // すべてのエミュレータ
