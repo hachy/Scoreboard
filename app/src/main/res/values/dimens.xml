@@ -3,17 +3,7 @@
     <dimen name="text_size_game">56sp</dimen>
     <dimen name="text_size_button">14sp</dimen>
 
-    <fraction name="score_width">30%</fraction>
-    <fraction name="game_width">15%</fraction>
-    <fraction name="percent_margin_default">2%</fraction>
-    <fraction name="percent_margin_left_1">34%</fraction>
-    <fraction name="percent_margin_left_2">51%</fraction>
-    <fraction name="percent_margin_left_3">68%</fraction>
-    <fraction name="game_height">41%</fraction>
-    <fraction name="button_margin">34%</fraction>
-    <fraction name="button_width">32%</fraction>
-    <fraction name="button_height">16%</fraction>
-    <fraction name="button_margin_top_1">46%</fraction>
-    <fraction name="button_margin_top_2">64%</fraction>
-    <fraction name="button_margin_top_3">82%</fraction>
+    <dimen name="margin_default">8dp</dimen>
+    <dimen name="vertical_margin">4dp</dimen>
+    <dimen name="game_margin">4dp</dimen>
 </resources>

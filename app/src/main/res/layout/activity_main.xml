@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,111 +7,131 @@
     android:background="@color/primary"
     tools:context=".MainActivity">
 
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/adView">
+    <TextView
+        android:id="@+id/scoreLeft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_score"
+        android:textStyle="bold"
+        ads:layout_constraintHorizontal_weight="0.3"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/gameLeft"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/scoreLeft"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_score"
-            android:textStyle="bold"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/percent_margin_default"
-            app:layout_marginTopPercent="@fraction/percent_margin_default"
-            app:layout_widthPercent="@fraction/score_width" />
+    <TextView
+        android:id="@+id/gameLeft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/game_margin"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginRight="@dimen/game_margin"
+        android:layout_marginStart="@dimen/margin_default"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_game"
+        android:textStyle="bold"
+        ads:layout_constraintHorizontal_weight="0.2"
+        ads:layout_constraintVertical_weight="0.46"
+        app:layout_constraintBottom_toTopOf="@+id/changeEndsButton"
+        app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
+        app:layout_constraintRight_toLeftOf="@+id/gameRight"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/gameLeft"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_game"
-            android:textStyle="bold"
-            app:layout_heightPercent="@fraction/game_height"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/percent_margin_left_1"
-            app:layout_marginTopPercent="@fraction/percent_margin_default"
-            app:layout_widthPercent="@fraction/game_width" />
+    <TextView
+        android:id="@+id/gameRight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginLeft="@dimen/game_margin"
+        android:layout_marginRight="@dimen/margin_default"
+        android:layout_marginStart="@dimen/game_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_game"
+        android:textStyle="bold"
+        ads:layout_constraintHorizontal_weight="0.2"
+        ads:layout_constraintVertical_weight="0.46"
+        app:layout_constraintBottom_toTopOf="@+id/changeEndsButton"
+        app:layout_constraintLeft_toRightOf="@+id/gameLeft"
+        app:layout_constraintRight_toLeftOf="@+id/scoreRight"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/gameRight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_game"
-            android:textStyle="bold"
-            app:layout_heightPercent="@fraction/game_height"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/percent_margin_left_2"
-            app:layout_marginTopPercent="@fraction/percent_margin_default"
-            app:layout_widthPercent="@fraction/game_width" />
+    <Button
+        android:id="@+id/changeEndsButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginRight="@dimen/margin_default"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:gravity="center"
+        android:text="@string/change_ends"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:theme="@style/MyButton"
+        ads:layout_constraintVertical_weight="0.18"
+        app:layout_constraintBottom_toTopOf="@+id/resetScoreButton"
+        app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
+        app:layout_constraintRight_toLeftOf="@+id/scoreRight"
+        app:layout_constraintTop_toBottomOf="@+id/gameLeft" />
 
-        <Button
-            android:id="@+id/changeEndsButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/change_ends"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:theme="@style/MyButton"
-            app:layout_heightPercent="@fraction/button_height"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/button_margin"
-            app:layout_marginTopPercent="@fraction/button_margin_top_1"
-            app:layout_widthPercent="@fraction/button_width" />
+    <Button
+        android:id="@+id/resetScoreButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginRight="@dimen/margin_default"
+        android:gravity="center"
+        android:text="@string/reset_scores"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:theme="@style/MyButton"
+        ads:layout_constraintVertical_weight="0.18"
+        app:layout_constraintBottom_toTopOf="@+id/resetAllButton"
+        app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
+        app:layout_constraintRight_toLeftOf="@+id/scoreRight"
+        app:layout_constraintTop_toBottomOf="@+id/changeEndsButton" />
 
-        <Button
-            android:id="@+id/resetScoreButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/reset_scores"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:theme="@style/MyButton"
-            app:layout_heightPercent="@fraction/button_height"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/button_margin"
-            app:layout_marginTopPercent="@fraction/button_margin_top_2"
-            app:layout_widthPercent="@fraction/button_width" />
+    <Button
+        android:id="@+id/resetAllButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginRight="@dimen/margin_default"
+        android:gravity="center"
+        android:text="@string/reset_all"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:theme="@style/MyButton"
+        ads:layout_constraintVertical_weight="0.18"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
+        app:layout_constraintRight_toLeftOf="@+id/scoreRight"
+        app:layout_constraintTop_toBottomOf="@+id/resetScoreButton" />
 
-        <Button
-            android:id="@+id/resetAllButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/reset_all"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:theme="@style/MyButton"
-            app:layout_heightPercent="@fraction/button_height"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/button_margin"
-            app:layout_marginTopPercent="@fraction/button_margin_top_3"
-            app:layout_widthPercent="@fraction/button_width" />
-
-        <TextView
-            android:id="@+id/scoreRight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_score"
-            android:textStyle="bold"
-            app:layout_marginBottomPercent="@fraction/percent_margin_default"
-            app:layout_marginLeftPercent="@fraction/percent_margin_left_3"
-            app:layout_marginTopPercent="@fraction/percent_margin_default"
-            app:layout_widthPercent="@fraction/score_width" />
-    </android.support.percent.PercentRelativeLayout>
+    <TextView
+        android:id="@+id/scoreRight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_score"
+        android:textStyle="bold"
+        ads:layout_constraintHorizontal_weight="0.3"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintLeft_toRightOf="@+id/gameRight"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -120,5 +140,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id_test" />
-</RelativeLayout>
+        ads:adUnitId="@string/banner_ad_unit_id_test"
+        ads:layout_constraintBottom_toBottomOf="parent" />
+</android.support.constraint.ConstraintLayout>
