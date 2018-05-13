@@ -2,8 +2,5 @@
     <dimen name="text_size_score">112sp</dimen>
     <dimen name="text_size_game">56sp</dimen>
     <dimen name="text_size_button">14sp</dimen>
-
-    <dimen name="margin_default">8dp</dimen>
     <dimen name="vertical_margin">4dp</dimen>
-    <dimen name="game_margin">4dp</dimen>
 </resources>
