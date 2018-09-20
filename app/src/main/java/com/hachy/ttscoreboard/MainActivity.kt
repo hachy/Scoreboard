@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         MobileAds.initialize(this, resources.getString(R.string.banner_ad_unit_id_test))
-//          val adRequest = AdRequest.Builder().build() // release用
+//        val adRequest = AdRequest.Builder().build() // release用
         val adRequest = AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // すべてのエミュレータ
                 .addTestDevice(resources.getString(R.string.test_device_id))  // テスト用携帯電話

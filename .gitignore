@@ -6,6 +6,7 @@
 /build
 
 # Built application files
+app/release/
 *.apk
 *.ap_
 
