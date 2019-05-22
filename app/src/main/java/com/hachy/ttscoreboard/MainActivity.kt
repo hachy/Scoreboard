@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val DetectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.LSCORE))
-        val DetectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.RSCORE))
-        val DetectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.LGAME))
-        val DetectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.RGAME))
+        val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.LSCORE))
+        val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.RSCORE))
+        val detectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.LGAME))
+        val detectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.RGAME))
 
         lscore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
         rscore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
@@ -40,22 +40,22 @@ class MainActivity : AppCompatActivity() {
         showGame()
 
         scoreLeft.setOnTouchListener { _, motionEvent ->
-            DetectorLScore.onTouchEvent(motionEvent)
+            detectorLScore.onTouchEvent(motionEvent)
             true
         }
 
         scoreRight.setOnTouchListener { _, motionEvent ->
-            DetectorRScore.onTouchEvent(motionEvent)
+            detectorRScore.onTouchEvent(motionEvent)
             true
         }
 
         gameLeft.setOnTouchListener { _, motionEvent ->
-            DetectorLGame.onTouchEvent(motionEvent)
+            detectorLGame.onTouchEvent(motionEvent)
             true
         }
 
         gameRight.setOnTouchListener { _, motionEvent ->
-            DetectorRGame.onTouchEvent(motionEvent)
+            detectorRGame.onTouchEvent(motionEvent)
             true
         }
 
@@ -90,18 +90,18 @@ class MainActivity : AppCompatActivity() {
         adView.loadAd(adRequest)
     }
 
-    fun resetScore() {
+    private fun resetScore() {
         lscore = 0
         rscore = 0
         showScore()
     }
 
-    fun showScore() {
+    private fun showScore() {
         scoreLeft.text = lscore.toString()
         scoreRight.text = rscore.toString()
     }
 
-    fun showGame() {
+    private fun showGame() {
         gameLeft.text = lgame.toString()
         gameRight.text = rgame.toString()
     }
@@ -116,12 +116,12 @@ class MainActivity : AppCompatActivity() {
             val distance = e1.y - e2.y
             val enoughSpeed = Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
 
-            if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
+            return if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
                 onSwipeDown()
-                return true
+                true
             } else {
                 // do nothing
-                return false
+                false
             }
         }
 
@@ -186,12 +186,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val SWIPE_MIN_DISTANCE = 120
-        private val SWIPE_MAX_OFF_PATH = 250
-        private val SWIPE_THRESHOLD_VELOCITY = 200
-        private val STATE_L_SCORE = "state_left_score"
-        private val STATE_R_SCORE = "state_right_score"
-        private val STATE_L_GAME = "state_left_game"
-        private val STATE_R_GAME = "state_right_game"
+        private const val SWIPE_MIN_DISTANCE = 120
+        private const val SWIPE_MAX_OFF_PATH = 250
+        private const val SWIPE_THRESHOLD_VELOCITY = 200
+        private const val STATE_L_SCORE = "state_left_score"
+        private const val STATE_R_SCORE = "state_right_score"
+        private const val STATE_L_GAME = "state_left_game"
+        private const val STATE_R_GAME = "state_right_game"
     }
 }
