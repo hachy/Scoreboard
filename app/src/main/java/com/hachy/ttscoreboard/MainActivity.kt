@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,22 +40,26 @@ class MainActivity : AppCompatActivity() {
         showScore()
         showGame()
 
-        scoreLeft.setOnTouchListener { _, motionEvent ->
+        scoreLeft.setOnTouchListener { v, motionEvent ->
+            v.performClick()
             detectorLScore.onTouchEvent(motionEvent)
             true
         }
 
-        scoreRight.setOnTouchListener { _, motionEvent ->
+        scoreRight.setOnTouchListener { v, motionEvent ->
+            v.performClick()
             detectorRScore.onTouchEvent(motionEvent)
             true
         }
 
-        gameLeft.setOnTouchListener { _, motionEvent ->
+        gameLeft.setOnTouchListener { v, motionEvent ->
+            v.performClick()
             detectorLGame.onTouchEvent(motionEvent)
             true
         }
 
-        gameRight.setOnTouchListener { _, motionEvent ->
+        gameRight.setOnTouchListener { v, motionEvent ->
+            v.performClick()
             detectorRGame.onTouchEvent(motionEvent)
             true
         }
@@ -81,12 +86,8 @@ class MainActivity : AppCompatActivity() {
             showGame()
         }
 
-        MobileAds.initialize(this, resources.getString(R.string.app_id))
-//        val adRequest = AdRequest.Builder().build() // release用
-        val adRequest = AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // すべてのエミュレータ
-                .addTestDevice(resources.getString(R.string.test_device_id))  // テスト用携帯電話
-                .build()
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
 
@@ -109,12 +110,12 @@ class MainActivity : AppCompatActivity() {
     inner class MyGestureListener(private val detector: Counter) : GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-            if (Math.abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
+            if (abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
                 return false
             }
 
             val distance = e1.y - e2.y
-            val enoughSpeed = Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
+            val enoughSpeed = abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
 
             return if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
                 onSwipeDown()
