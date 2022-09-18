@@ -1,5 +1,6 @@
 package com.hachy.ttscoreboard
 
+import android.annotation.SuppressLint
 import androidx.core.view.GestureDetectorCompat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +9,7 @@ import android.view.MotionEvent
 
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
-import kotlinx.android.synthetic.main.activity_main.*
+import com.hachy.ttscoreboard.databinding.ActivityMainBinding
 import kotlin.math.abs
 
 
@@ -23,9 +24,15 @@ class MainActivity : AppCompatActivity() {
     private var lgame = 0
     private var rgame = 0
 
+    private lateinit var binding: ActivityMainBinding
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.LSCORE))
         val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.RSCORE))
@@ -40,31 +47,31 @@ class MainActivity : AppCompatActivity() {
         showScore()
         showGame()
 
-        scoreLeft.setOnTouchListener { v, motionEvent ->
+        binding.scoreLeft.setOnTouchListener { v, motionEvent ->
             v.performClick()
             detectorLScore.onTouchEvent(motionEvent)
             true
         }
 
-        scoreRight.setOnTouchListener { v, motionEvent ->
+        binding.scoreRight.setOnTouchListener { v, motionEvent ->
             v.performClick()
             detectorRScore.onTouchEvent(motionEvent)
             true
         }
 
-        gameLeft.setOnTouchListener { v, motionEvent ->
+        binding.gameLeft.setOnTouchListener { v, motionEvent ->
             v.performClick()
             detectorLGame.onTouchEvent(motionEvent)
             true
         }
 
-        gameRight.setOnTouchListener { v, motionEvent ->
+        binding.gameRight.setOnTouchListener { v, motionEvent ->
             v.performClick()
             detectorRGame.onTouchEvent(motionEvent)
             true
         }
 
-        changeEndsButton.setOnClickListener {
+        binding.changeEndsButton.setOnClickListener {
             val ls = lscore
             lscore = rscore
             rscore = ls
@@ -75,11 +82,11 @@ class MainActivity : AppCompatActivity() {
             showGame()
         }
 
-        resetScoreButton.setOnClickListener {
+        binding.resetScoreButton.setOnClickListener {
             resetScore()
         }
 
-        resetAllButton.setOnClickListener {
+        binding.resetAllButton.setOnClickListener {
             resetScore()
             lgame = 0
             rgame = 0
@@ -88,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this) {}
         val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        binding.adView.loadAd(adRequest)
     }
 
     private fun resetScore() {
@@ -98,18 +105,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showScore() {
-        scoreLeft.text = lscore.toString()
-        scoreRight.text = rscore.toString()
+        binding.scoreLeft.text = lscore.toString()
+        binding.scoreRight.text = rscore.toString()
     }
 
     private fun showGame() {
-        gameLeft.text = lgame.toString()
-        gameRight.text = rgame.toString()
+        binding.gameLeft.text = lgame.toString()
+        binding.gameRight.text = rgame.toString()
     }
 
-    inner class MyGestureListener(private val detector: Counter) : GestureDetector.SimpleOnGestureListener() {
+    inner class MyGestureListener(private val detector: Counter) :
+        GestureDetector.SimpleOnGestureListener() {
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             if (abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
                 return false
             }
@@ -130,19 +143,19 @@ class MainActivity : AppCompatActivity() {
             when (detector) {
                 Counter.LSCORE -> {
                     lscore++
-                    scoreLeft.text = lscore.toString()
+                    binding.scoreLeft.text = lscore.toString()
                 }
                 Counter.RSCORE -> {
                     rscore++
-                    scoreRight.text = rscore.toString()
+                    binding.scoreRight.text = rscore.toString()
                 }
                 Counter.LGAME -> {
                     lgame++
-                    gameLeft.text = lgame.toString()
+                    binding.gameLeft.text = lgame.toString()
                 }
                 Counter.RGAME -> {
                     rgame++
-                    gameRight.text = rgame.toString()
+                    binding.gameRight.text = rgame.toString()
                 }
             }
             return false
@@ -152,19 +165,19 @@ class MainActivity : AppCompatActivity() {
             when (detector) {
                 Counter.LSCORE -> if (lscore > 0) {
                     lscore--
-                    scoreLeft.text = lscore.toString()
+                    binding.scoreLeft.text = lscore.toString()
                 }
                 Counter.RSCORE -> if (rscore > 0) {
                     rscore--
-                    scoreRight.text = rscore.toString()
+                    binding.scoreRight.text = rscore.toString()
                 }
                 Counter.LGAME -> if (lgame > 0) {
                     lgame--
-                    gameLeft.text = lgame.toString()
+                    binding.gameLeft.text = lgame.toString()
                 }
                 Counter.RGAME -> if (rgame > 0) {
                     rgame--
-                    gameRight.text = rgame.toString()
+                    binding.gameRight.text = rgame.toString()
                 }
             }
         }
