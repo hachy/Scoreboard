@@ -1,14 +1,18 @@
 package com.hachy.ttscoreboard
 
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.core.view.GestureDetectorCompat
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
 
-import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.hachy.ttscoreboard.databinding.ActivityMainBinding
 import kotlin.math.abs
 
@@ -25,6 +29,44 @@ class MainActivity : AppCompatActivity() {
     private var rgame = 0
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adView: AdManagerAdView
+    private var initialLayoutComplete = false
+
+    @Suppress("DEPRECATION")
+    private val adSize: AdSize
+        get() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val windowMetrics = windowManager.currentWindowMetrics
+                val bounds = windowMetrics.bounds
+                var adWidthPixels = binding.adViewContainer.width.toFloat()
+                if (adWidthPixels == 0f) {
+                    adWidthPixels = bounds.width().toFloat()
+                }
+                val density = resources.displayMetrics.density
+                val adWidth = (adWidthPixels / density).toInt()
+
+                return AdSize.getLandscapeAnchoredAdaptiveBannerAdSize(this, adWidth)
+            } else {
+                val display = windowManager.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display.getMetrics(outMetrics)
+                val density = outMetrics.density
+                var adWidthPixels = binding.adViewContainer.width.toFloat()
+                if (adWidthPixels == 0f) {
+                    adWidthPixels = outMetrics.widthPixels.toFloat()
+                }
+                val adWidth = (adWidthPixels / density).toInt()
+                return AdSize.getLandscapeAnchoredAdaptiveBannerAdSize(this, adWidth)
+            }
+        }
+
+    private fun loadBanner() {
+        adView.adUnitId = resources.getString(R.string.banner_ad_unit_id_test)
+        adView.setAdSizes(adSize, AdSize.BANNER)
+        val adRequest = AdManagerAdRequest
+            .Builder().build()
+        adView.loadAd(adRequest)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,8 +136,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         MobileAds.initialize(this) {}
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+
+        adView = AdManagerAdView(this)
+        binding.adViewContainer.addView(adView)
+        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadBanner()
+            }
+        }
     }
 
     private fun resetScore() {
