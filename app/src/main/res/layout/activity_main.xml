@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toTopOf="@+id/resetScoreButton"
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
-        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        app:layout_constraintWidth_max="320dp" />
 
     <Button
         android:id="@+id/resetScoreButton"
@@ -36,7 +37,8 @@
         app:layout_constraintBottom_toTopOf="@+id/resetAllButton"
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
-        app:layout_constraintTop_toBottomOf="@+id/changeEndsButton" />
+        app:layout_constraintTop_toBottomOf="@+id/changeEndsButton"
+        app:layout_constraintWidth_max="320dp" />
 
     <Button
         android:id="@+id/resetAllButton"
@@ -51,7 +53,8 @@
         app:layout_constraintBottom_toTopOf="@+id/ad_view_container"
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
-        app:layout_constraintTop_toBottomOf="@+id/resetScoreButton" />
+        app:layout_constraintTop_toBottomOf="@+id/resetScoreButton"
+        app:layout_constraintWidth_max="320dp" />
 
     <FrameLayout
         android:id="@+id/ad_view_container"
