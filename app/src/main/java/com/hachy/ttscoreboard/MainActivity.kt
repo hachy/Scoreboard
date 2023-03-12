@@ -20,13 +20,13 @@ import kotlin.math.abs
 class MainActivity : AppCompatActivity() {
 
     enum class Counter {
-        LSCORE, RSCORE, LGAME, RGAME
+        L_SCORE, R_SCORE, L_GAME, R_GAME
     }
 
-    private var lscore = 0
-    private var rscore = 0
-    private var lgame = 0
-    private var rgame = 0
+    private var leftScore = 0
+    private var rightScore = 0
+    private var leftGame = 0
+    private var rightGame = 0
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adView: AdManagerAdView
@@ -76,15 +76,15 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.LSCORE))
-        val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.RSCORE))
-        val detectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.LGAME))
-        val detectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.RGAME))
+        val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.L_SCORE))
+        val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.R_SCORE))
+        val detectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.L_GAME))
+        val detectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.R_GAME))
 
-        lscore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
-        rscore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
-        lgame = savedInstanceState?.getInt(STATE_L_GAME) ?: 0
-        rgame = savedInstanceState?.getInt(STATE_R_GAME) ?: 0
+        leftScore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
+        rightScore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
+        leftGame = savedInstanceState?.getInt(STATE_L_GAME) ?: 0
+        rightGame = savedInstanceState?.getInt(STATE_R_GAME) ?: 0
 
         showScore()
         showGame()
@@ -114,12 +114,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.changeEndsButton.setOnClickListener {
-            val ls = lscore
-            lscore = rscore
-            rscore = ls
-            val lg = lgame
-            lgame = rgame
-            rgame = lg
+            val ls = leftScore
+            leftScore = rightScore
+            rightScore = ls
+            val lg = leftGame
+            leftGame = rightGame
+            rightGame = lg
             showScore()
             showGame()
         }
@@ -130,8 +130,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.resetAllButton.setOnClickListener {
             resetScore()
-            lgame = 0
-            rgame = 0
+            leftGame = 0
+            rightGame = 0
             showGame()
         }
 
@@ -148,19 +148,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetScore() {
-        lscore = 0
-        rscore = 0
+        leftScore = 0
+        rightScore = 0
         showScore()
     }
 
     private fun showScore() {
-        binding.scoreLeft.text = lscore.toString()
-        binding.scoreRight.text = rscore.toString()
+        binding.scoreLeft.text = leftScore.toString()
+        binding.scoreRight.text = rightScore.toString()
     }
 
     private fun showGame() {
-        binding.gameLeft.text = lgame.toString()
-        binding.gameRight.text = rgame.toString()
+        binding.gameLeft.text = leftGame.toString()
+        binding.gameRight.text = rightGame.toString()
     }
 
     inner class MyGestureListener(private val detector: Counter) :
@@ -190,21 +190,21 @@ class MainActivity : AppCompatActivity() {
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             when (detector) {
-                Counter.LSCORE -> {
-                    lscore++
-                    binding.scoreLeft.text = lscore.toString()
+                Counter.L_SCORE -> {
+                    leftScore++
+                    binding.scoreLeft.text = leftScore.toString()
                 }
-                Counter.RSCORE -> {
-                    rscore++
-                    binding.scoreRight.text = rscore.toString()
+                Counter.R_SCORE -> {
+                    rightScore++
+                    binding.scoreRight.text = rightScore.toString()
                 }
-                Counter.LGAME -> {
-                    lgame++
-                    binding.gameLeft.text = lgame.toString()
+                Counter.L_GAME -> {
+                    leftGame++
+                    binding.gameLeft.text = leftGame.toString()
                 }
-                Counter.RGAME -> {
-                    rgame++
-                    binding.gameRight.text = rgame.toString()
+                Counter.R_GAME -> {
+                    rightGame++
+                    binding.gameRight.text = rightGame.toString()
                 }
             }
             return false
@@ -212,40 +212,40 @@ class MainActivity : AppCompatActivity() {
 
         private fun onSwipeDown() {
             when (detector) {
-                Counter.LSCORE -> if (lscore > 0) {
-                    lscore--
-                    binding.scoreLeft.text = lscore.toString()
+                Counter.L_SCORE -> if (leftScore > 0) {
+                    leftScore--
+                    binding.scoreLeft.text = leftScore.toString()
                 }
-                Counter.RSCORE -> if (rscore > 0) {
-                    rscore--
-                    binding.scoreRight.text = rscore.toString()
+                Counter.R_SCORE -> if (rightScore > 0) {
+                    rightScore--
+                    binding.scoreRight.text = rightScore.toString()
                 }
-                Counter.LGAME -> if (lgame > 0) {
-                    lgame--
-                    binding.gameLeft.text = lgame.toString()
+                Counter.L_GAME -> if (leftGame > 0) {
+                    leftGame--
+                    binding.gameLeft.text = leftGame.toString()
                 }
-                Counter.RGAME -> if (rgame > 0) {
-                    rgame--
-                    binding.gameRight.text = rgame.toString()
+                Counter.R_GAME -> if (rightGame > 0) {
+                    rightGame--
+                    binding.gameRight.text = rightGame.toString()
                 }
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(STATE_L_SCORE, lscore)
-        outState.putInt(STATE_R_SCORE, rscore)
-        outState.putInt(STATE_L_GAME, lgame)
-        outState.putInt(STATE_R_GAME, rgame)
+        outState.putInt(STATE_L_SCORE, leftScore)
+        outState.putInt(STATE_R_SCORE, rightScore)
+        outState.putInt(STATE_L_GAME, leftGame)
+        outState.putInt(STATE_R_GAME, rightGame)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        lscore = savedInstanceState.getInt(STATE_L_SCORE)
-        rscore = savedInstanceState.getInt(STATE_R_SCORE)
-        lgame = savedInstanceState.getInt(STATE_L_GAME)
-        rgame = savedInstanceState.getInt(STATE_R_GAME)
+        leftScore = savedInstanceState.getInt(STATE_L_SCORE)
+        rightScore = savedInstanceState.getInt(STATE_R_SCORE)
+        leftGame = savedInstanceState.getInt(STATE_L_GAME)
+        rightGame = savedInstanceState.getInt(STATE_R_GAME)
     }
 
     companion object {
