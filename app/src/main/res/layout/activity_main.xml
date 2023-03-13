@@ -12,11 +12,16 @@
         android:id="@+id/changeEndsButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:autoSizeMaxTextSize="@dimen/button_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/button_padding"
         android:text="@string/change_ends"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textSize="@dimen/text_size_button"
+        android:textStyle="bold"
         android:theme="@style/MyButton"
         ads:layout_constraintHeight_percent=".16"
         ads:layout_constraintWidth_percent=".36"
@@ -24,17 +29,23 @@
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
         app:layout_constraintTop_toBottomOf="@+id/barrier"
-        app:layout_constraintWidth_max="320dp" />
+        app:layout_constraintWidth_max="320dp"
+        tools:ignore="UnusedAttribute" />
 
     <Button
         android:id="@+id/resetScoreButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:autoSizeMaxTextSize="@dimen/button_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/button_padding"
         android:text="@string/reset_scores"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textSize="@dimen/text_size_button"
+        android:textStyle="bold"
         android:theme="@style/MyButton"
         ads:layout_constraintHeight_percent=".16"
         ads:layout_constraintWidth_percent=".36"
@@ -42,17 +53,23 @@
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
         app:layout_constraintTop_toBottomOf="@+id/changeEndsButton"
-        app:layout_constraintWidth_max="320dp" />
+        app:layout_constraintWidth_max="320dp"
+        tools:ignore="UnusedAttribute" />
 
     <Button
         android:id="@+id/resetAllButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:autoSizeMaxTextSize="@dimen/button_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/button_padding"
         android:text="@string/reset_all"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textSize="@dimen/text_size_button"
+        android:textStyle="bold"
         android:theme="@style/MyButton"
         ads:layout_constraintHeight_percent=".16"
         ads:layout_constraintWidth_percent=".36"
@@ -60,7 +77,8 @@
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
         app:layout_constraintTop_toBottomOf="@+id/resetScoreButton"
-        app:layout_constraintWidth_max="320dp" />
+        app:layout_constraintWidth_max="320dp"
+        tools:ignore="UnusedAttribute" />
 
     <FrameLayout
         android:id="@+id/ad_view_container"
@@ -74,11 +92,14 @@
         android:id="@+id/gameLeft"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/game_bottom_margin"
+        android:autoSizeMaxTextSize="@dimen/game_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:background="@android:color/black"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/game_padding"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_game"
         android:textStyle="bold"
@@ -86,17 +107,21 @@
         app:layout_constraintBottom_toTopOf="@+id/changeEndsButton"
         app:layout_constraintLeft_toRightOf="@+id/scoreLeft"
         app:layout_constraintRight_toLeftOf="@+id/gameRight"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/gameRight"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/game_bottom_margin"
+        android:autoSizeMaxTextSize="@dimen/game_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:background="@android:color/black"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/game_padding"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_game"
         android:textStyle="bold"
@@ -104,17 +129,21 @@
         app:layout_constraintBottom_toTopOf="@+id/changeEndsButton"
         app:layout_constraintLeft_toRightOf="@+id/gameLeft"
         app:layout_constraintRight_toLeftOf="@+id/scoreRight"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/scoreRight"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/vertical_margin"
+        android:autoSizeMaxTextSize="@dimen/score_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:background="@android:color/black"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/score_padding"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_score"
         android:textStyle="bold"
@@ -122,17 +151,21 @@
         app:layout_constraintBottom_toTopOf="@+id/ad_view_container"
         app:layout_constraintLeft_toRightOf="@+id/gameRight"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/scoreLeft"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/vertical_margin"
+        android:autoSizeMaxTextSize="@dimen/score_auto_text_max"
+        android:autoSizeTextType="uniform"
         android:background="@android:color/black"
         android:gravity="center"
         android:lines="1"
         android:maxLines="1"
+        android:padding="@dimen/score_padding"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_score"
         android:textStyle="bold"
@@ -141,7 +174,8 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/gameLeft"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
