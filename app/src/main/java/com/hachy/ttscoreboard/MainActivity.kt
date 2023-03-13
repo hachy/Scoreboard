@@ -114,12 +114,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.changeEndsButton.setOnClickListener {
-            val ls = leftScore
-            leftScore = rightScore
-            rightScore = ls
-            val lg = leftGame
-            leftGame = rightGame
-            rightGame = lg
+            leftScore = rightScore.also { rightScore = leftScore }
+            leftGame = rightGame.also { rightGame = leftGame }
             showScore()
             showGame()
         }
