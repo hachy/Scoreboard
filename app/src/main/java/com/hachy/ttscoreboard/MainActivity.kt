@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    @SuppressLint("VisibleForTests")
     private fun loadBanner() {
         adView.adUnitId = resources.getString(R.string.banner_ad_unit_id_test)
         adView.setAdSizes(adSize, AdSize.BANNER)
-        val adRequest = AdManagerAdRequest
-            .Builder().build()
+        val adRequest = AdManagerAdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
 
