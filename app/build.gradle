@@ -26,14 +26,17 @@ android {
     buildFeatures {
         viewBinding true
     }
+    kotlin {
+        jvmToolchain(8)
+    }
     namespace 'com.hachy.ttscoreboard'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-ads:21.2.0'
+    implementation 'com.google.android.gms:play-services-ads:21.5.0'
 }
 
 repositories {
