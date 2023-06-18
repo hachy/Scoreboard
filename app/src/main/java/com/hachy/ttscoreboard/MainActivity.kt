@@ -163,25 +163,27 @@ class MainActivity : AppCompatActivity() {
         GestureDetector.SimpleOnGestureListener() {
 
         override fun onFling(
-            e1: MotionEvent,
+            e1: MotionEvent?,
             e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
-            if (abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
-                return false
-            }
+            if (e1 != null) {
+                if (abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
+                    return false
+                }
 
-            val distance = e1.y - e2.y
-            val enoughSpeed = abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
+                val distance = e1.y - e2.y
+                val enoughSpeed = abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
 
-            return if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
-                onSwipeDown()
-                true
-            } else {
-                // do nothing
-                false
+                return if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
+                    onSwipeDown()
+                    true
+                } else {
+                    false
+                }
             }
+            return false
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -190,14 +192,17 @@ class MainActivity : AppCompatActivity() {
                     leftScore++
                     binding.scoreLeft.text = leftScore.toString()
                 }
+
                 Counter.R_SCORE -> {
                     rightScore++
                     binding.scoreRight.text = rightScore.toString()
                 }
+
                 Counter.L_GAME -> {
                     leftGame++
                     binding.gameLeft.text = leftGame.toString()
                 }
+
                 Counter.R_GAME -> {
                     rightGame++
                     binding.gameRight.text = rightGame.toString()
@@ -212,14 +217,17 @@ class MainActivity : AppCompatActivity() {
                     leftScore--
                     binding.scoreLeft.text = leftScore.toString()
                 }
+
                 Counter.R_SCORE -> if (rightScore > 0) {
                     rightScore--
                     binding.scoreRight.text = rightScore.toString()
                 }
+
                 Counter.L_GAME -> if (leftGame > 0) {
                     leftGame--
                     binding.gameLeft.text = leftGame.toString()
                 }
+
                 Counter.R_GAME -> if (rightGame > 0) {
                     rightGame--
                     binding.gameRight.text = rightGame.toString()
