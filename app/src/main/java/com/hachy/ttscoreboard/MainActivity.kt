@@ -13,6 +13,10 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 import com.hachy.ttscoreboard.databinding.ActivityMainBinding
 import kotlin.math.abs
 
@@ -31,6 +35,57 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adView: AdManagerAdView
     private var initialLayoutComplete = false
+
+    private lateinit var consentInformation: ConsentInformation
+
+    private fun initConsentForm() {
+        val debugSettings = ConsentDebugSettings.Builder(this)
+            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+            .addTestDeviceHashedId(resources.getString((R.string.test_device_id)))
+            .build()
+
+        val params = ConsentRequestParameters
+            .Builder()
+            .setTagForUnderAgeOfConsent(false)
+//            .setConsentDebugSettings(debugSettings)
+            .build()
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params,
+            {
+                if (consentInformation.isConsentFormAvailable) {
+                    loadForm()
+                }
+            },
+            {
+                // Handle the error.
+            })
+    }
+
+    private fun loadForm() {
+        // Loads a consent form. Must be called on the main thread.
+        UserMessagingPlatform.loadConsentForm(
+            this,
+            {
+                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
+                    it.show(
+                        this
+                    ) {
+//                        if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED) {
+                        // App can start requesting ads.
+//                        }
+                        // Handle dismissal by reloading form.
+                        loadForm()
+                    }
+                }
+            },
+            {
+                // Handle the error.
+            }
+        )
+    }
 
     @Suppress("DEPRECATION")
     private val adSize: AdSize
@@ -75,6 +130,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        initConsentForm()
 
         val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.L_SCORE))
         val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.R_SCORE))
