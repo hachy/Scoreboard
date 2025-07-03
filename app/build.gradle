@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.hachy.ttscoreboard"
         manifestPlaceholders = [appName: "@string/app_name"]
-        minSdk 21
-        targetSdk 34
-        versionCode 11
-        versionName '1.0.10'
+        minSdk 24
+        targetSdk 36
+        versionCode 12
+        versionName '1.0.11'
     }
     buildTypes {
         debug {
@@ -29,14 +29,14 @@ android {
         viewBinding true
     }
     kotlin {
-        jvmToolchain(8)
+        jvmToolchain(21)
     }
     namespace 'com.hachy.ttscoreboard'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-ads:22.1.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'com.google.android.gms:play-services-ads:24.4.0'
 }
