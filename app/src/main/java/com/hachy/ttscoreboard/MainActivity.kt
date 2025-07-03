@@ -7,16 +7,19 @@ import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
+import com.google.android.gms.ads.AdRequest
 
 import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.admanager.AdManagerAdRequest
-import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import com.hachy.ttscoreboard.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 
@@ -32,10 +35,9 @@ class MainActivity : AppCompatActivity() {
     private var rightGame = 0
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adView: AdManagerAdView
-    private var initialLayoutComplete = false
-
     private lateinit var consentInformation: ConsentInformation
+    private lateinit var adView: AdView
+    private var initialLayoutComplete = false
 
     private fun initConsentForm() {
         val debugSettings = ConsentDebugSettings.Builder(this)
@@ -86,40 +88,52 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    @Suppress("DEPRECATION")
-    private val adSize: AdSize
-        get() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val windowMetrics = windowManager.currentWindowMetrics
-                val bounds = windowMetrics.bounds
-                var adWidthPixels = binding.adViewContainer.width.toFloat()
-                if (adWidthPixels == 0f) {
-                    adWidthPixels = bounds.width().toFloat()
-                }
-                val density = resources.displayMetrics.density
-                val adWidth = (adWidthPixels / density).toInt()
+    private fun initAdMobBanner() {
+        CoroutineScope(Dispatchers.IO).launch {
+            MobileAds.initialize(this@MainActivity) {}
+        }
 
-                return AdSize.getLandscapeAnchoredAdaptiveBannerAdSize(this, adWidth)
-            } else {
-                val display = windowManager.defaultDisplay
-                val outMetrics = DisplayMetrics()
-                display.getMetrics(outMetrics)
-                val density = outMetrics.density
-                var adWidthPixels = binding.adViewContainer.width.toFloat()
-                if (adWidthPixels == 0f) {
-                    adWidthPixels = outMetrics.widthPixels.toFloat()
-                }
-                val adWidth = (adWidthPixels / density).toInt()
-                return AdSize.getLandscapeAnchoredAdaptiveBannerAdSize(this, adWidth)
+        adView = AdView(this)
+        binding.adViewContainer.removeAllViews()
+        binding.adViewContainer.addView(adView)
+        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadBanner()
             }
         }
+    }
 
     @SuppressLint("VisibleForTests")
     private fun loadBanner() {
         adView.adUnitId = resources.getString(R.string.banner_ad_unit_id_test)
-        adView.setAdSizes(adSize, AdSize.BANNER)
-        val adRequest = AdManagerAdRequest.Builder().build()
+        adView.setAdSize(getLandscapeAdaptiveAdSize)
+        val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
+    }
+
+    private val getLandscapeAdaptiveAdSize: AdSize
+        get() {
+            val adWidthPixels = calculateAdWidthPixels()
+            val density = resources.displayMetrics.density
+            val adWidth = (adWidthPixels / density).toInt()
+            return AdSize.getLandscapeAnchoredAdaptiveBannerAdSize(this, adWidth)
+        }
+
+    @Suppress("DEPRECATION")
+    private fun calculateAdWidthPixels(): Float {
+        val width = binding.adViewContainer.width.toFloat()
+        if (width > 0f) return width
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val bounds = windowManager.currentWindowMetrics.bounds
+            bounds.width().toFloat()
+        } else {
+            val display = windowManager.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display.getMetrics(outMetrics)
+            outMetrics.widthPixels.toFloat()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -131,6 +145,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         initConsentForm()
+        initAdMobBanner()
 
         val detectorLScore = GestureDetector(this, MyGestureListener(Counter.L_SCORE))
         val detectorRScore = GestureDetector(this, MyGestureListener(Counter.R_SCORE))
@@ -185,17 +200,6 @@ class MainActivity : AppCompatActivity() {
             leftGame = 0
             rightGame = 0
             showGame()
-        }
-
-        MobileAds.initialize(this) {}
-
-        adView = AdManagerAdView(this)
-        binding.adViewContainer.addView(adView)
-        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadBanner()
-            }
         }
     }
 
