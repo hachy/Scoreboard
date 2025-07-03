@@ -2,7 +2,6 @@ package com.hachy.ttscoreboard
 
 import android.annotation.SuppressLint
 import android.os.Build
-import androidx.core.view.GestureDetectorCompat
 import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
@@ -133,10 +132,10 @@ class MainActivity : AppCompatActivity() {
 
         initConsentForm()
 
-        val detectorLScore = GestureDetectorCompat(this, MyGestureListener(Counter.L_SCORE))
-        val detectorRScore = GestureDetectorCompat(this, MyGestureListener(Counter.R_SCORE))
-        val detectorLGame = GestureDetectorCompat(this, MyGestureListener(Counter.L_GAME))
-        val detectorRGame = GestureDetectorCompat(this, MyGestureListener(Counter.R_GAME))
+        val detectorLScore = GestureDetector(this, MyGestureListener(Counter.L_SCORE))
+        val detectorRScore = GestureDetector(this, MyGestureListener(Counter.R_SCORE))
+        val detectorLGame = GestureDetector(this, MyGestureListener(Counter.L_GAME))
+        val detectorRGame = GestureDetector(this, MyGestureListener(Counter.R_GAME))
 
         leftScore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
         rightScore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
