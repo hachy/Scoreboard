@@ -23,14 +23,12 @@ import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
-    enum class Counter {
-        L_SCORE, R_SCORE, L_GAME, R_GAME
-    }
+    enum class Counter { L_SCORE, R_SCORE, L_GAME, R_GAME }
 
-    private var leftScore = 0
-    private var rightScore = 0
-    private var leftGame = 0
-    private var rightGame = 0
+    data class ScoreState(var score: Int = 0, var game: Int = 0)
+
+    private val left = ScoreState()
+    private val right = ScoreState()
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
@@ -110,92 +108,68 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         handleConsentAndInitAds()
 
-        val detectorLScore = GestureDetector(this, MyGestureListener(Counter.L_SCORE))
-        val detectorRScore = GestureDetector(this, MyGestureListener(Counter.R_SCORE))
-        val detectorLGame = GestureDetector(this, MyGestureListener(Counter.L_GAME))
-        val detectorRGame = GestureDetector(this, MyGestureListener(Counter.R_GAME))
+        restoreState(savedInstanceState)
 
-        leftScore = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
-        rightScore = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
-        leftGame = savedInstanceState?.getInt(STATE_L_GAME) ?: 0
-        rightGame = savedInstanceState?.getInt(STATE_R_GAME) ?: 0
+        setupGesture(binding.scoreLeft, Counter.L_SCORE)
+        setupGesture(binding.scoreRight, Counter.R_SCORE)
+        setupGesture(binding.gameLeft, Counter.L_GAME)
+        setupGesture(binding.gameRight, Counter.R_GAME)
 
-        showScore()
-        showGame()
+        binding.changeEndsButton.setOnClickListener { swapEnds() }
+        binding.resetScoreButton.setOnClickListener { resetScore() }
+        binding.resetAllButton.setOnClickListener { resetAll() }
 
-        binding.scoreLeft.setOnTouchListener { v, motionEvent ->
+        updateUI()
+    }
+
+    private fun restoreState(savedInstanceState: Bundle?) {
+        left.score = savedInstanceState?.getInt(STATE_L_SCORE) ?: 0
+        right.score = savedInstanceState?.getInt(STATE_R_SCORE) ?: 0
+        left.game = savedInstanceState?.getInt(STATE_L_GAME) ?: 0
+        right.game = savedInstanceState?.getInt(STATE_R_GAME) ?: 0
+    }
+
+    private fun setupGesture(view: android.view.View, counter: Counter) {
+        val detector = GestureDetector(this, MyGestureListener(counter))
+        view.setOnTouchListener { v, event ->
             v.performClick()
-            detectorLScore.onTouchEvent(motionEvent)
+            detector.onTouchEvent(event)
             true
         }
+    }
 
-        binding.scoreRight.setOnTouchListener { v, motionEvent ->
-            v.performClick()
-            detectorRScore.onTouchEvent(motionEvent)
-            true
-        }
-
-        binding.gameLeft.setOnTouchListener { v, motionEvent ->
-            v.performClick()
-            detectorLGame.onTouchEvent(motionEvent)
-            true
-        }
-
-        binding.gameRight.setOnTouchListener { v, motionEvent ->
-            v.performClick()
-            detectorRGame.onTouchEvent(motionEvent)
-            true
-        }
-
-        binding.changeEndsButton.setOnClickListener {
-            leftScore = rightScore.also { rightScore = leftScore }
-            leftGame = rightGame.also { rightGame = leftGame }
-            showScore()
-            showGame()
-        }
-
-        binding.resetScoreButton.setOnClickListener {
-            resetScore()
-        }
-
-        binding.resetAllButton.setOnClickListener {
-            resetScore()
-            leftGame = 0
-            rightGame = 0
-            showGame()
-        }
+    private fun swapEnds() {
+        left.score = right.score.also { right.score = left.score }
+        left.game = right.game.also { right.game = left.game }
+        updateUI()
     }
 
     private fun resetScore() {
-        leftScore = 0
-        rightScore = 0
-        showScore()
+        left.score = 0
+        right.score = 0
+        updateUI()
     }
 
-    private fun showScore() {
-        binding.scoreLeft.text = leftScore.toString()
-        binding.scoreRight.text = rightScore.toString()
+    private fun resetAll() {
+        resetScore()
+        left.game = 0
+        right.game = 0
+        updateUI()
     }
 
-    private fun showGame() {
-        binding.gameLeft.text = leftGame.toString()
-        binding.gameRight.text = rightGame.toString()
+    private fun updateUI() {
+        binding.scoreLeft.text = left.score.toString()
+        binding.scoreRight.text = right.score.toString()
+        binding.gameLeft.text = left.game.toString()
+        binding.gameRight.text = right.game.toString()
     }
 
-    inner class MyGestureListener(private val detector: Counter) :
-        GestureDetector.SimpleOnGestureListener() {
-
-        override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
+    inner class MyGestureListener(private val detector: Counter) : GestureDetector.SimpleOnGestureListener() {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (e1 != null) {
                 if (abs(e1.x - e2.x) > SWIPE_MAX_OFF_PATH) {
                     return false
@@ -216,68 +190,38 @@ class MainActivity : AppCompatActivity() {
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             when (detector) {
-                Counter.L_SCORE -> {
-                    leftScore++
-                    binding.scoreLeft.text = leftScore.toString()
-                }
-
-                Counter.R_SCORE -> {
-                    rightScore++
-                    binding.scoreRight.text = rightScore.toString()
-                }
-
-                Counter.L_GAME -> {
-                    leftGame++
-                    binding.gameLeft.text = leftGame.toString()
-                }
-
-                Counter.R_GAME -> {
-                    rightGame++
-                    binding.gameRight.text = rightGame.toString()
-                }
+                Counter.L_SCORE -> left.score++
+                Counter.R_SCORE -> right.score++
+                Counter.L_GAME -> left.game++
+                Counter.R_GAME -> right.game++
             }
+            updateUI()
             return false
         }
 
         private fun onSwipeDown() {
             when (detector) {
-                Counter.L_SCORE -> if (leftScore > 0) {
-                    leftScore--
-                    binding.scoreLeft.text = leftScore.toString()
-                }
-
-                Counter.R_SCORE -> if (rightScore > 0) {
-                    rightScore--
-                    binding.scoreRight.text = rightScore.toString()
-                }
-
-                Counter.L_GAME -> if (leftGame > 0) {
-                    leftGame--
-                    binding.gameLeft.text = leftGame.toString()
-                }
-
-                Counter.R_GAME -> if (rightGame > 0) {
-                    rightGame--
-                    binding.gameRight.text = rightGame.toString()
-                }
+                Counter.L_SCORE -> if (left.score > 0) left.score--
+                Counter.R_SCORE -> if (right.score > 0) right.score--
+                Counter.L_GAME -> if (left.game > 0) left.game--
+                Counter.R_GAME -> if (right.game > 0) right.game--
             }
+            updateUI()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(STATE_L_SCORE, leftScore)
-        outState.putInt(STATE_R_SCORE, rightScore)
-        outState.putInt(STATE_L_GAME, leftGame)
-        outState.putInt(STATE_R_GAME, rightGame)
+        outState.putInt(STATE_L_SCORE, left.score)
+        outState.putInt(STATE_R_SCORE, right.score)
+        outState.putInt(STATE_L_GAME, left.game)
+        outState.putInt(STATE_R_GAME, right.game)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        leftScore = savedInstanceState.getInt(STATE_L_SCORE)
-        rightScore = savedInstanceState.getInt(STATE_R_SCORE)
-        leftGame = savedInstanceState.getInt(STATE_L_GAME)
-        rightGame = savedInstanceState.getInt(STATE_R_GAME)
+        restoreState(savedInstanceState)
+        updateUI()
     }
 
     public override fun onPause() {
@@ -303,7 +247,7 @@ class MainActivity : AppCompatActivity() {
         private const val STATE_R_SCORE = "state_right_score"
         private const val STATE_L_GAME = "state_left_game"
         private const val STATE_R_GAME = "state_right_game"
-        fun getTestDeviceHashedId(context: Context):String{
+        fun getTestDeviceHashedId(context: Context): String {
             return context.getString(R.string.test_device_id)
         }
     }
