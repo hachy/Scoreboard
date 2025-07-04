@@ -1,9 +1,11 @@
 package com.hachy.ttscoreboard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -12,11 +14,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.ump.ConsentDebugSettings
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentRequestParameters
-import com.google.android.ump.UserMessagingPlatform
 import com.hachy.ttscoreboard.databinding.ActivityMainBinding
+import com.hachy.ttscoreboard.utils.GoogleMobileAdsConsentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +23,6 @@ import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
-
     enum class Counter {
         L_SCORE, R_SCORE, L_GAME, R_GAME
     }
@@ -35,70 +33,35 @@ class MainActivity : AppCompatActivity() {
     private var rightGame = 0
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var consentInformation: ConsentInformation
-    private lateinit var adView: AdView
-    private var initialLayoutComplete = false
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+    private var adView: AdView? = null
 
-    private fun initConsentForm() {
-        val debugSettings = ConsentDebugSettings.Builder(this)
-            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-            .addTestDeviceHashedId(resources.getString((R.string.test_device_id)))
-            .build()
-
-        val params = ConsentRequestParameters
-            .Builder()
-            .setTagForUnderAgeOfConsent(false)
-//            .setConsentDebugSettings(debugSettings)
-            .build()
-
-        consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        consentInformation.requestConsentInfoUpdate(
-            this,
-            params,
-            {
-                if (consentInformation.isConsentFormAvailable) {
-                    loadForm()
-                }
-            },
-            {
-                // Handle the error.
-            })
-    }
-
-    private fun loadForm() {
-        // Loads a consent form. Must be called on the main thread.
-        UserMessagingPlatform.loadConsentForm(
-            this,
-            {
-                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
-                    it.show(
-                        this
-                    ) {
-//                        if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED) {
-                        // App can start requesting ads.
-//                        }
-                        // Handle dismissal by reloading form.
-                        loadForm()
-                    }
-                }
-            },
-            {
-                // Handle the error.
+    private fun handleConsentAndInitAds() {
+        googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(applicationContext)
+        googleMobileAdsConsentManager.gatherConsent(this) { error ->
+            if (error != null) {
+                Log.d("Log for ConsentForm", "${error.errorCode}: ${error.message}")
             }
-        )
+
+            if (googleMobileAdsConsentManager.canRequestAds) {
+                initAdMobBanner()
+            }
+
+            if (googleMobileAdsConsentManager.isPrivacyOptionsRequired) {
+                // Regenerate the options menu to include a privacy setting.
+                invalidateOptionsMenu()
+            }
+        }
+
+        if (googleMobileAdsConsentManager.canRequestAds) {
+            initAdMobBanner()
+        }
     }
 
     private fun initAdMobBanner() {
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
-        }
-
-        adView = AdView(this)
-        binding.adViewContainer.removeAllViews()
-        binding.adViewContainer.addView(adView)
-        binding.adViewContainer.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
+            runOnUiThread {
                 loadBanner()
             }
         }
@@ -106,8 +69,14 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("VisibleForTests")
     private fun loadBanner() {
+        val adView = AdView(this)
         adView.adUnitId = resources.getString(R.string.banner_ad_unit_id_test)
         adView.setAdSize(getLandscapeAdaptiveAdSize)
+        this.adView = adView
+
+        binding.adViewContainer.removeAllViews()
+        binding.adViewContainer.addView(adView)
+
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
@@ -144,8 +113,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        initConsentForm()
-        initAdMobBanner()
+        handleConsentAndInitAds()
 
         val detectorLScore = GestureDetector(this, MyGestureListener(Counter.L_SCORE))
         val detectorRScore = GestureDetector(this, MyGestureListener(Counter.R_SCORE))
@@ -312,6 +280,21 @@ class MainActivity : AppCompatActivity() {
         rightGame = savedInstanceState.getInt(STATE_R_GAME)
     }
 
+    public override fun onPause() {
+        adView?.pause()
+        super.onPause()
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        adView?.resume()
+    }
+
+    public override fun onDestroy() {
+        adView?.destroy()
+        super.onDestroy()
+    }
+
     companion object {
         private const val SWIPE_MIN_DISTANCE = 120
         private const val SWIPE_MAX_OFF_PATH = 250
@@ -320,5 +303,8 @@ class MainActivity : AppCompatActivity() {
         private const val STATE_R_SCORE = "state_right_score"
         private const val STATE_L_GAME = "state_left_game"
         private const val STATE_R_GAME = "state_right_game"
+        fun getTestDeviceHashedId(context: Context):String{
+            return context.getString(R.string.test_device_id)
+        }
     }
 }
